@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import io.swagger.annotations.Api;
+import net.webservicex.Country;
 
 @Api
 @Path("/posts")
@@ -48,11 +49,14 @@ public class PostsService {
 		return Response.ok().build();
 	}
 
+	private Country country;
+
 	@PostConstruct
 	public void init() {
 		posts.put(1, new Post(1, "Title 1", "long blah body 1"));
 		posts.put(2, new Post(2, "Short Title", "Short Story"));
 		posts.put(3, new Post(3, "React Title", "Short Story"));
+		this.country = new Country();
 	}
 
 	@GET
@@ -98,4 +102,16 @@ public class PostsService {
 	public Response getPostsFromSub() {
 		return Response.ok(subservice.getPosts()).build();
 	}
+
+	@GET
+	@Path("/country/{code}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getStockQuote(@PathParam("code") String countryCode) {
+		String countryByCountryCode = country.getCountrySoap().getCountryByCountryCode(countryCode);
+		Post entity = new Post();
+		entity.setTitle(countryCode);
+		entity.setBody(countryByCountryCode);
+		return Response.ok(entity).build();
+	}
+
 }

@@ -6,16 +6,22 @@ import org.wso2.msf4j.Request;
 import org.wso2.msf4j.Response;
 import org.wso2.msf4j.ServiceMethodInfo;
 
+/**
+ * This is to allow CORS but should really be handled by an API manager.
+ * @author trajano
+ *
+ */
 @Component
 public class CorsInterceptor implements Interceptor {
 
 	@Override
 	public boolean preCall(Request request, Response response, ServiceMethodInfo serviceMethodInfo) throws Exception {
 		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Credentials", "true");
+		// response.setHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
 		response.setHeader("Access-Control-Max-Age", "3600");
-		response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
+		// response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept,
+		// X-Requested-With, remember-me");
 
 		if (request.getHeader("Origin") != null && !request.getHeader("Origin").isEmpty()) {
 			response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
